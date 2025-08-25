@@ -11,5 +11,5 @@ config_version=5
 [application]
 
 config/name="Brackeys 2025"
+run/main_scene="uid://s67p1qob7srn"
 config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
