@@ -14,7 +14,15 @@ animations = [{
 "texture": SubResource("AtlasTexture_smlvt")
 }],
 "loop": true,
-"name": &"default",
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_smlvt")
+}],
+"loop": true,
+"name": &"default_1",
 "speed": 5.0
 }]
 
@@ -26,6 +34,7 @@ script = ExtResource("1_smlvt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_h0i82")
+animation = &"default_1"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1)
