@@ -1,8 +1,6 @@
 extends CharacterBody2D
 
-
 const SPEED = 300.0
-
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -17,9 +15,12 @@ func _physics_process(delta: float) -> void:
 		$AttackArea/CollisionShape2D.disabled = true
 		
 	
+	#this should have a similar hitbox system as the attack, 
+	#but instead of looking for a player hitbox it would look for the attack hitbox, so im gonna have to do funny layer stuff i think
 	if Input.is_action_just_pressed("parry_singleplayer"):
 		print("parry")
 		
+	#This shouldnt have any hitbox, it should just play a feint animation to bait the enemy 
 	if Input.is_action_just_pressed("feint_singleplayer"):
 		print("feint")
 
