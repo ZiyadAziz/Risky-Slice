@@ -11,8 +11,12 @@ config_version=5
 [application]
 
 config/name="Brackeys 2025"
-run/main_scene="uid://s67p1qob7srn"
+run/main_scene="uid://sprw24yajqf7"
 config/features=PackedStringArray("4.4", "Forward Plus")
+
+[autoload]
+
+GameManager="*res://scripts/game_manager.gd"
 
 [input]
 

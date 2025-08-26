@@ -9,9 +9,9 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("attack_singleplayer"): #Need to add a timer or something so that the player has to wait for the animation to end before attacking again 
 		$AttackArea/CollisionShape2D.disabled = false
-		print("attacking")
-		await get_tree().create_timer(1.0).timeout #this probs shouldnt be the solution, I'd want to tie the timer to the attack animation when I make one 
-		print("attacking")
+		#print("attacking")
+		await get_tree().create_timer(0.5).timeout #this probs shouldnt be the solution, I'd want to tie the timer to the attack animation when I make one 
+		#print("attacking")
 		$AttackArea/CollisionShape2D.disabled = true
 		
 	
