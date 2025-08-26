@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://gf5ckfd357wu"]
+[gd_scene load_steps=7 format=3 uid="uid://gf5ckfd357wu"]
 
 [ext_resource type="Texture2D" uid="uid://cqdciv1wjjbi8" path="res://assets/TempCharacter.png" id="1_qc3fp"]
 [ext_resource type="Script" uid="uid://cci86n52r1vp6" path="res://scripts/temp_player.gd" id="1_smlvt"]
@@ -29,6 +29,9 @@ animations = [{
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j5nhj"]
 radius = 7.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_smlvt"]
+size = Vector2(26, 10)
+
 [node name="TempPlayer" type="CharacterBody2D"]
 script = ExtResource("1_smlvt")
 
@@ -39,3 +42,10 @@ animation = &"default_1"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1)
 shape = SubResource("CapsuleShape2D_j5nhj")
+
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(22, 0)
+shape = SubResource("RectangleShape2D_smlvt")
+disabled = true
