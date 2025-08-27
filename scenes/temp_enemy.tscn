@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c4jjhndepghq6"]
+[gd_scene load_steps=8 format=3 uid="uid://c4jjhndepghq6"]
 
 [ext_resource type="Script" uid="uid://daessbl0vi3gr" path="res://scripts/temp_enemy.gd" id="1_2wt5d"]
 [ext_resource type="Texture2D" uid="uid://xwffp4rvjoya" path="res://assets/TempEnemy.png" id="1_xq7ou"]
@@ -24,6 +24,9 @@ radius = 8.0
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xq7ou"]
 radius = 8.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2wt5d"]
+size = Vector2(26, 10)
+
 [node name="temp_enemy" type="CharacterBody2D"]
 script = ExtResource("1_2wt5d")
 
@@ -39,4 +42,12 @@ shape = SubResource("CapsuleShape2D_k2yj4")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 shape = SubResource("CapsuleShape2D_xq7ou")
 
+[node name="ParryArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ParryArea"]
+position = Vector2(-22, 0)
+shape = SubResource("RectangleShape2D_2wt5d")
+
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
+[connection signal="area_entered" from="ParryArea" to="." method="_on_parry_area_area_entered"]
+[connection signal="body_entered" from="ParryArea" to="." method="_on_parry_area_body_entered"]

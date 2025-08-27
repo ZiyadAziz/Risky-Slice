@@ -13,4 +13,7 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 		GameManager.reset_round()
 		print(GameManager.p1_score)
 		
-	pass # Replace with function body.
+
+func _on_parry_area_area_entered(area: Area2D) -> void:
+	print("parried")
+	
