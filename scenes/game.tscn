@@ -18,7 +18,8 @@ sources/0 = SubResource("TileSetAtlasSource_lnu2h")
 [node name="Game" type="Node2D"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(2, 2)
+position = Vector2(-7, -53)
+zoom = Vector2(3, 4)
 
 [node name="TempPlayer" parent="." instance=ExtResource("1_uwrxv")]
 position = Vector2(-153, -16)

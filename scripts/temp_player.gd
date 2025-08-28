@@ -20,14 +20,15 @@ var isFeinting := false
 var isParrying := false
 var isBlocking := false
 
+#Animations
+@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+
 func _physics_process(delta: float) -> void:
 	# Attack
-	if Input.is_action_just_pressed("attack_singleplayer"): #Need to add a timer or something so that the player has to wait for the animation to end before attacking again 
-		isAttacking = true #This will likely have to be moved to when the windup of the attack animation finishes 
-		$AttackArea/CollisionShape2D.disabled = false
-		await get_tree().create_timer(0.5).timeout #this probs shouldnt be the solution, I'd want to tie the timer to the attack animation when I make one 
-		$AttackArea/CollisionShape2D.disabled = true
-		isAttacking = false #This should be tied to the animation, but since I dont have one, this will do
+	if Input.is_action_just_pressed("attack_singleplayer") && isAttacking == false: #The &&isAttacking makes you have to wait for the attack to finish before being able to attack again
+		animated_sprite_2d.play("Attack Windup") #Still need a windup area2d
+		isAttacking = true
+		
 
 	#this should have a similar hitbox system as the attack, 
 	#but instead of looking for a player hitbox it would look for the attack hitbox, so im gonna have to do funny layer stuff i think
@@ -45,6 +46,7 @@ func _physics_process(delta: float) -> void:
 
 	# Handle dodge logic
 	if is_dodging:
+		animated_sprite_2d.play("Dodge")
 		dodge_timer -= delta
 		velocity.x = dodge_direction * DODGE_SPEED
 		if dodge_timer <= 0:
@@ -70,6 +72,14 @@ func _physics_process(delta: float) -> void:
 				start_dodge(-1)
 			last_tap_time_left = current_time
 
+		if direction == 0 && isAttacking == false:
+			animated_sprite_2d.play("Idle")
+		elif direction > 0 && isAttacking == false:
+			animated_sprite_2d.play("Walk Forwards")
+		elif direction < 0 && isAttacking == false:
+			animated_sprite_2d.play("Walk Backwards")
+			
+
 		# Normal movement if not dodging
 		if direction > 0 && isAttacking == false:
 			velocity.x = direction * SPEED
@@ -86,3 +96,12 @@ func start_dodge(dir: int) -> void:
 	dodge_timer = DODGE_TIME
 	dodge_direction = dir
 	print("Dodging in direction:", dir)
+	
+
+func _on_animated_sprite_2d_animation_finished() -> void:
+	if animated_sprite_2d.animation == "Attack Windup":
+		animated_sprite_2d.play("Attack")
+		$AttackArea/CollisionShape2D.disabled = false
+	elif animated_sprite_2d.animation == "Attack":
+		$AttackArea/CollisionShape2D.disabled = true
+		isAttacking = false
