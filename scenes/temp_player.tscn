@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://gf5ckfd357wu"]
+[gd_scene load_steps=36 format=3 uid="uid://gf5ckfd357wu"]
 
 [ext_resource type="Script" uid="uid://cci86n52r1vp6" path="res://scripts/temp_player.gd" id="1_smlvt"]
 [ext_resource type="Texture2D" uid="uid://8agiqb8j86fo" path="res://assets/attack_1_colored_Sekiro.png" id="2_a17a3"]
@@ -31,6 +31,10 @@ region = Rect2(240, 0, 48, 48)
 atlas = ExtResource("2_a17a3")
 region = Rect2(288, 0, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_i0cpa"]
+atlas = ExtResource("3_h0i82")
+region = Rect2(160, 0, 32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_800pv"]
 atlas = ExtResource("2_a17a3")
 region = Rect2(0, 0, 48, 48)
@@ -38,14 +42,6 @@ region = Rect2(0, 0, 48, 48)
 [sub_resource type="AtlasTexture" id="AtlasTexture_app25"]
 atlas = ExtResource("3_3fv0j")
 region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cgvig"]
-atlas = ExtResource("2_smlvt")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_i0cpa"]
-atlas = ExtResource("3_h0i82")
-region = Rect2(160, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_flhoj"]
 atlas = ExtResource("2_a17a3")
@@ -137,6 +133,9 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i0cpa")
+}, {
 "duration": 5.0,
 "texture": SubResource("AtlasTexture_800pv")
 }],
@@ -153,9 +152,6 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cgvig")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_i0cpa")
 }, {
@@ -249,7 +245,7 @@ script = ExtResource("1_smlvt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_h0i82")
-animation = &"Attack Windup"
+animation = &"Attack"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 5.5)
