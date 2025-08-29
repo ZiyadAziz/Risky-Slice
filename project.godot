@@ -18,6 +18,11 @@ config/features=PackedStringArray("4.4", "Forward Plus")
 
 GameManager="*res://scripts/game_manager.gd"
 
+[display]
+
+window/size/viewport_width=1024
+window/size/viewport_height=768
+
 [input]
 
 attack_singleplayer={
