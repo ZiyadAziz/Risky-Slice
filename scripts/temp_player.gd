@@ -28,9 +28,15 @@ var isBlocking := false
 
 var parried := false
 
-var health := 5.0
+var health := 4.0
 
 func _physics_process(delta: float) -> void:
+	if health <= 0.0: #This might have to be in physics process
+		#Have a death animation 
+		print("player dead")
+		GameManager.p2_score += 1
+		GameManager.reset_round()
+			
 	# Attack
 	if Input.is_action_just_pressed("attack_singleplayer") && !(isAttacking || isParrying || isFeinting): #The &&isAttacking makes you have to wait for the attack to finish before being able to attack again
 		animated_sprite_2d_2.visible = true
@@ -95,11 +101,6 @@ func _physics_process(delta: float) -> void:
 			velocity.x = (direction * SPEED) / 2
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
-
-	if health <= 0.0: #This might have to be in physics process
-			print("player dead")
-			GameManager.p2_score += 1
-			GameManager.reset_round()
 			
 	move_and_slide()
 
@@ -142,7 +143,8 @@ func _on_animated_sprite_2d_3_animation_finished() -> void:
 			animated_sprite_2d.play("Parry Fail")
 			await animated_sprite_2d.animation_finished
 			isParrying = false
-			health -= 10
+			GameManager.p2_score += 1
+			GameManager.reset_round()
 		else:
 			isParrying = false
 
@@ -163,11 +165,12 @@ func _on_windup_area_area_entered(area: Area2D) -> void:
 		animated_sprite_2d_4.visible = false
 		animated_sprite_2d.play("Got Parried") #This needs to change to a getting parried animation where the player stumbles and the enemy does a slash to kill them (reduce hp by like 10 here)
 		await animated_sprite_2d.animation_finished
-		health -= 10
+		GameManager.p2_score += 1
+		GameManager.reset_round()
 
 func _on_hurt_box_area_entered(area: Area2D) -> void:
 	if area.is_in_group("EnemySword"):
 		if isBlocking:
-			health -= .25
+			health -= .5
 		else:
 			health -= 1.0

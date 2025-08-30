@@ -11,7 +11,7 @@ var isParrying := false
 var isBlocking := false
 
 var parried := false
-var health := 5.0
+var health := 4.0
 
 @onready var player: CharacterBody2D = $"../TempPlayer"
 #@onready var player = get_node("/root/MainScene/Player")
@@ -24,41 +24,41 @@ var health := 5.0
 func _physics_process(delta: float) -> void:
 	if health <= 0.0:
 			print("AI dead")
+			#Have a death animation 
 			GameManager.p1_score += 1
 			GameManager.reset_round()
 			return
 
 	# React to player windup
 	var player_windup = player.animated_sprite_2d_2.animation == "Attack Windup"
+	var player_feint = player.animated_sprite_2d_2.animation == "Feint"
 	var player_distance = global_position.distance_to(player.global_position)
 
 	# AI makes decisions every interval
-	decision_timer -= delta
+	if velocity.x == 0:
+		decision_timer -= delta
 	if decision_timer <= 0:
-		make_decision(player_distance, player_windup)
+		make_decision(player_distance, player_windup, player_feint)
 		decision_timer = DECISION_INTERVAL
-	
-	## Handle dodge
-	#if is_dodging:
-		#animated_sprite_2d.play("Dodge")
-		#dodge_timer -= delta
-		#velocity.x = dodge_direction * DODGE_SPEED
-		#if dodge_timer <= 0:
-			#is_dodging = false
-	#else:
-		## Simple AI: move towards player
-		#var dir = sign(player.global_position.x - global_position.x)
-		#velocity.x = dir * SPEED
-		#if abs(player_distance) < 50:
-			#velocity.x = 0
+
 	
 	if !(isAttacking || isParrying || isFeinting):
 		var dir = sign(player.global_position.x - global_position.x)
-		velocity.x = dir * SPEED
+		
+		if abs(player_distance) < 10:
+			# Too close, move backwards
+			dir *= -1
+			velocity.x = dir * SPEED
+		elif abs(player_distance) < 20:
+			# Within range but not too close, stop moving
+			velocity.x = 0
+		else:
+			# Otherwise, move toward the player
+			velocity.x = dir * SPEED
 	else:
+		# If attacking, parrying, or feinting, don't move
 		velocity.x = 0
-	if abs(player_distance) < 20:
-		velocity.x = 0
+
 
 	# Animate idle/walk
 	if !(isAttacking || isFeinting || isParrying):
@@ -72,24 +72,29 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	
-func make_decision(dist, player_windup):
+func make_decision(dist, player_windup, player_feint):
 	if isAttacking or isFeinting or isParrying:
 		return
 
-	#if player_windup and dist < 80:
-		## Try to parry
-		#start_parry()
-		#return
+	if (player_windup || player_feint) and dist < 20:
+		#Try to parry a feint or an actual attack
+		var parry_chance = randi() % 100
+		if player_feint && parry_chance < 10:
+			start_parry()
+		elif player_windup && parry_chance < 5:
+			start_parry()
+		return
 
 	if dist < 40:
 		var choice = randi() % 100
-		if choice < 40:
+		if choice < 20:
+			start_feint()
+		elif choice < 80:
 			start_attack()
-		elif choice < 70:
-			start_feint()
+		elif choice < 90:
+			start_parry()
 		else:
-			start_feint()
-			#start_parry()
+			return
 
 func start_attack():
 	print("AI Attacking")
@@ -142,15 +147,15 @@ func _on_animated_sprite_2d_3_animation_finished() -> void:
 			animated_sprite_2d.play("Parry Fail")
 			await animated_sprite_2d.animation_finished
 			isParrying = false
-			health -= 10
-			print("here now")
+			GameManager.p1_score += 1
+			GameManager.reset_round()
 		else:
 			isParrying = false
 
 func _on_hurtbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("PlayerSword"):
 		if isBlocking:
-			health -= .25
+			health -= .5
 		else:
 			health -= 1.0
 		
@@ -167,9 +172,10 @@ func _on_windup_area_area_entered(area: Area2D) -> void:
 	if area.is_in_group("PlayerParry"):
 		isParrying = true
 		animated_sprite_2d_2.visible = false
-		animated_sprite_2d.visible = true
 		animated_sprite_2d_4.visible = false
+		animated_sprite_2d.visible = true
 		animated_sprite_2d.play("Got Parried")
 		await animated_sprite_2d.animation_finished
-		health -= 10
+		GameManager.p1_score += 1
+		GameManager.reset_round()
 		

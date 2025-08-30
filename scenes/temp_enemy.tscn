@@ -1,6 +1,7 @@
-[gd_scene load_steps=78 format=3 uid="uid://c4jjhndepghq6"]
+[gd_scene load_steps=82 format=3 uid="uid://c4jjhndepghq6"]
 
 [ext_resource type="Script" uid="uid://daessbl0vi3gr" path="res://scripts/temp_enemy.gd" id="1_2wt5d"]
+[ext_resource type="Shader" uid="uid://n8lc724n4ka2" path="res://scripts/enemy_shader.gdshader" id="2_knlt3"]
 [ext_resource type="Texture2D" uid="uid://bg2ivmtvxn5ig" path="res://assets/spritesheets/lowdodge_bald.png" id="2_ljsbn"]
 [ext_resource type="Texture2D" uid="uid://ce7d53e4f757w" path="res://assets/spritesheets/idle_mid_bald4.png" id="3_tlgwr"]
 [ext_resource type="Texture2D" uid="uid://cml22uw7qhx3l" path="res://assets/spritesheets/dead_bald.png" id="4_0c68b"]
@@ -11,6 +12,13 @@
 [ext_resource type="Texture2D" uid="uid://ctwmv8inirl17" path="res://assets/spritesheets/high_attack_bald.png" id="9_ctfpq"]
 [ext_resource type="Texture2D" uid="uid://c3dd8i4ec4p5i" path="res://assets/spritesheets/idle_high_bald2.png" id="10_01m0j"]
 [ext_resource type="Texture2D" uid="uid://wavksu2dx2l3" path="res://assets/spritesheets/swordslash.png" id="11_mruor"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ctfpq"]
+shader = ExtResource("2_knlt3")
+shader_parameter/target_colors = PackedColorArray(0.231373, 0.27451, 0.368627, 1, 0.309804, 0.364706, 0.490196, 1, 0.145098, 0.164706, 0.215686, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/replace_colors = PackedColorArray(0.127972, 0.275959, 0.15469, 1, 0.190621, 0.387887, 0.226129, 1, 0.0417579, 0.12038, 0.0559813, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/color_count = 3
+shader_parameter/tolerance = 0.169
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_app25"]
 atlas = ExtResource("2_ljsbn")
@@ -434,6 +442,13 @@ size = Vector2(24, 55)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k2yj4"]
 size = Vector2(24, 55)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_knlt3"]
+shader = ExtResource("2_knlt3")
+shader_parameter/target_colors = PackedColorArray(0.231373, 0.27451, 0.368627, 1, 0.309804, 0.364706, 0.490196, 1, 0.145098, 0.164706, 0.215686, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/replace_colors = PackedColorArray(0.129412, 0.27451, 0.152941, 1, 0.192157, 0.388235, 0.227451, 1, 0.0431373, 0.121569, 0.054902, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/color_count = 3
+shader_parameter/tolerance = 0.169
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_cgvig"]
 atlas = ExtResource("9_ctfpq")
 region = Rect2(144, 0, 36, 50)
@@ -488,6 +503,13 @@ animations = [{
 "name": &"Feint",
 "speed": 5.0
 }]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_01m0j"]
+shader = ExtResource("2_knlt3")
+shader_parameter/target_colors = PackedColorArray(0.231373, 0.27451, 0.368627, 1, 0.309804, 0.364706, 0.490196, 1, 0.145098, 0.164706, 0.215686, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/replace_colors = PackedColorArray(0.129412, 0.27451, 0.152941, 1, 0.192157, 0.388235, 0.227451, 1, 0.0431373, 0.121569, 0.054902, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/color_count = 3
+shader_parameter/tolerance = 0.169
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ed2sy"]
 atlas = ExtResource("10_01m0j")
@@ -550,23 +572,27 @@ animations = [{
 script = ExtResource("1_2wt5d")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_ctfpq")
 sprite_frames = SubResource("SpriteFrames_5eeuo")
 animation = &"Walk Forwards"
-frame = 5
-frame_progress = 0.954768
+frame = 4
+frame_progress = 0.824269
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(10.5, -0.5)
 shape = SubResource("RectangleShape2D_o3a3e")
 
 [node name="Hurtbox" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(10.5, -0.5)
 shape = SubResource("RectangleShape2D_avyqo")
 
 [node name="ParryArea" type="Area2D" parent="." groups=["EnemyParry"]]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ParryArea"]
 position = Vector2(5.5, -6.5)
@@ -574,6 +600,7 @@ shape = SubResource("RectangleShape2D_2wt5d")
 disabled = true
 
 [node name="AttackArea" type="Area2D" parent="." groups=["EnemySword"]]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
 position = Vector2(-12, -7.5)
@@ -581,6 +608,7 @@ shape = SubResource("RectangleShape2D_5eeuo")
 disabled = true
 
 [node name="WindupArea" type="Area2D" parent="." groups=["EnemyWindup"]]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WindupArea"]
 position = Vector2(-12, -7.5)
@@ -589,16 +617,22 @@ disabled = true
 
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
 visible = false
+material = SubResource("ShaderMaterial_knlt3")
 position = Vector2(18, -5)
 sprite_frames = SubResource("SpriteFrames_rkf0c")
 animation = &"Attack Windup"
+frame = 1
+frame_progress = 1.0
 flip_h = true
 
 [node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="."]
 visible = false
+material = SubResource("ShaderMaterial_01m0j")
 position = Vector2(6.5, -6.5)
 sprite_frames = SubResource("SpriteFrames_3r0ke")
 animation = &"Parry"
+frame = 3
+frame_progress = 1.0
 flip_h = true
 
 [node name="AnimatedSprite2D4" type="AnimatedSprite2D" parent="."]
