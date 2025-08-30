@@ -6,6 +6,9 @@ const SPEED = 50.0
 const DODGE_SPEED = 500.0 #Can think of this as how fast the dodge happens
 const DODGE_TIME = 0.08 #Can think of this as the distance of the dodge
 const DOUBLE_TAP_TIME = 0.3 #Can think of this as how quick the player needs to double tap to actually dodge
+const DODGE_COOLDOWN = 0.5 # seconds
+var dodge_cooldown_timer := 0.0
+
 
 #These dont need to be edited 
 var dodge_timer := 0.0
@@ -30,10 +33,19 @@ var parried := false
 
 var health := 4.0
 
+#audio
+@onready var sword_slash_woosh: AudioStreamPlayer = $sword_slash_woosh
+
 func _physics_process(delta: float) -> void:
 	if health <= 0.0: #This might have to be in physics process
 		#Have a death animation 
 		print("player dead")
+		animated_sprite_2d_2.visible = false
+		animated_sprite_2d_3.visible = false
+		animated_sprite_2d_4.visible = false
+		animated_sprite_2d.visible = true
+		animated_sprite_2d.play("Death")
+		await animated_sprite_2d.animation_finished
 		GameManager.p2_score += 1
 		GameManager.reset_round()
 			
@@ -60,10 +72,20 @@ func _physics_process(delta: float) -> void:
 		isFeinting = true
 
 	# Handle dodge logic
+	if dodge_cooldown_timer > 0.0:
+		dodge_cooldown_timer -= delta
+
 	if is_dodging && !(isAttacking || isParrying || isFeinting):
 		animated_sprite_2d.play("Dodge")
 		dodge_timer -= delta
-		velocity.x = dodge_direction * DODGE_SPEED
+		
+		# Maintain the dodge velocity set in start_dodge()
+		# Optionally re-apply in case something overwrites it, but keep the speed check consistent
+		if dodge_direction < 0:
+			velocity.x = dodge_direction * (DODGE_SPEED / 2)
+		else:
+			velocity.x = dodge_direction * (DODGE_SPEED / 1.3)
+			
 		if dodge_timer <= 0:
 			is_dodging = false
 	else:
@@ -76,14 +98,14 @@ func _physics_process(delta: float) -> void:
 		var current_time := Time.get_ticks_msec() / 1000.0
 		#moving right
 		if Input.is_action_just_pressed("move_forward_singleplayer"):
-			if current_time - last_tap_time_right < DOUBLE_TAP_TIME:
+			if current_time - last_tap_time_right < DOUBLE_TAP_TIME and dodge_cooldown_timer <= 0.0:
 				start_dodge(1)
 			last_tap_time_right = current_time
-		#moving left
 		elif Input.is_action_just_pressed("block_and_move_backwards_singleplayer"):
-			if current_time - last_tap_time_left < DOUBLE_TAP_TIME:
+			if current_time - last_tap_time_left < DOUBLE_TAP_TIME and dodge_cooldown_timer <= 0.0:
 				start_dodge(-1)
 			last_tap_time_left = current_time
+
 
 		#Play movement animations
 		if direction == 0 && !(isAttacking || isParrying || isFeinting):
@@ -109,6 +131,7 @@ func start_dodge(dir: int) -> void:
 	is_dodging = true
 	dodge_timer = DODGE_TIME
 	dodge_direction = dir
+	dodge_cooldown_timer = DODGE_COOLDOWN
 	print("Dodging in direction:", dir)
 	
 
@@ -117,6 +140,7 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 
 func _on_animated_sprite_2d_2_animation_finished() -> void:
 	if animated_sprite_2d_2.animation == "Attack Windup":
+		sword_slash_woosh.play()
 		animated_sprite_2d_2.play("Attack")
 		animated_sprite_2d_4.visible = true
 		animated_sprite_2d_4.play("Slash")
@@ -174,3 +198,8 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 			health -= .5
 		else:
 			health -= 1.0
+
+func apply_hitstop(duration: float = 0.1):
+	Engine.time_scale = 0.9
+	await get_tree().create_timer(duration, true).timeout
+	Engine.time_scale = 1.0

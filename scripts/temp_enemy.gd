@@ -179,3 +179,8 @@ func _on_windup_area_area_entered(area: Area2D) -> void:
 		GameManager.p1_score += 1
 		GameManager.reset_round()
 		
+
+func apply_hitstop(duration: float = 0.1):
+	Engine.time_scale = 0.0
+	await get_tree().create_timer(duration, true).timeout
+	Engine.time_scale = 1.0
