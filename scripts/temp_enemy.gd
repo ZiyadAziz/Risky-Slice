@@ -23,11 +23,16 @@ var health := 4.0
 
 func _physics_process(delta: float) -> void:
 	if health <= 0.0:
-			print("AI dead")
-			#Have a death animation 
-			GameManager.p1_score += 1
-			GameManager.reset_round()
-			return
+		print("AI dead")
+		animated_sprite_2d_2.visible = false
+		animated_sprite_2d_3.visible = false
+		animated_sprite_2d_4.visible = false
+		animated_sprite_2d.visible = true
+		animated_sprite_2d.play("Death")
+		await animated_sprite_2d.animation_finished
+		GameManager.p1_score += 1
+		GameManager.reset_round()
+		return
 
 	# React to player windup
 	var player_windup = player.animated_sprite_2d_2.animation == "Attack Windup"
