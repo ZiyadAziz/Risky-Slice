@@ -562,13 +562,13 @@ script = ExtResource("1_smlvt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_h0i82")
-animation = &"Walk Forwards"
+animation = &"Idle"
 
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
 visible = false
 position = Vector2(-18, -5)
 sprite_frames = SubResource("SpriteFrames_3fv0j")
-animation = &"Feint"
+animation = &"Attack"
 
 [node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="."]
 visible = false
@@ -577,6 +577,7 @@ sprite_frames = SubResource("SpriteFrames_ed2sy")
 animation = &"Parry"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(-10.25, -0.25)
 shape = SubResource("RectangleShape2D_j5nhj")
 

@@ -542,7 +542,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_uvgke")
 }],
 "loop": false,
-"name": &"Slash",
+"name": &"default",
 "speed": 5.0
 }]
 
@@ -551,9 +551,7 @@ script = ExtResource("1_2wt5d")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_5eeuo")
-animation = &"Walk Forwards"
-frame = 5
-frame_progress = 0.954768
+animation = &"Parry Fail"
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -605,7 +603,6 @@ flip_h = true
 visible = false
 position = Vector2(6, -8)
 sprite_frames = SubResource("SpriteFrames_s1uh7")
-animation = &"Slash"
 flip_h = true
 
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
